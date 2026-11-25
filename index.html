@@ -1,0 +1,1080 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRUJIX SABOR | Gemelo Digital 3D</title>
+
+<style>
+:root {
+  --orange:#f47721;
+  --yellow:#ffc247;
+  --brown:#4a2b19;
+  --cream:#fff4df;
+}
+
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#17120e;
+  color:white;
+}
+
+header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:17px 5%;
+  background:#24170f;
+  border-bottom:2px solid var(--orange);
+}
+
+.logo {
+  font-size:25px;
+  font-weight:900;
+  letter-spacing:2px;
+  color:var(--yellow);
+}
+
+.logo small {
+  display:block;
+  font-size:10px;
+  letter-spacing:3px;
+  color:white;
+  margin-top:4px;
+}
+
+header a {
+  color:white;
+  text-decoration:none;
+  background:var(--orange);
+  padding:11px 16px;
+  border-radius:9px;
+  font-weight:bold;
+}
+
+.intro {
+  text-align:center;
+  padding:22px 15px 5px;
+}
+
+.intro h1 {
+  margin:0;
+  color:var(--yellow);
+  font-size:clamp(24px,4vw,36px);
+}
+
+.intro p { color:#e6d5c2; }
+
+.stage {
+  height:620px;
+  max-width:1200px;
+  margin:0 auto;
+  position:relative;
+  overflow:hidden;
+  perspective:1000px;
+  background:radial-gradient(
+    ellipse at 50% 40%,
+    #79512f 0,
+    #352316 55%,
+    #17120e 100%
+  );
+  border-radius:18px;
+}
+
+.scene {
+  position:absolute;
+  width:700px;
+  height:430px;
+  left:50%;
+  top:48%;
+  transform-style:preserve-3d;
+  transform:translate(-50%,-50%) rotateX(-12deg) rotateY(-25deg);
+  transition:transform .08s linear;
+}
+
+.room-floor {
+  position:absolute;
+  width:700px;
+  height:470px;
+  left:0;
+  top:0;
+  transform:rotateX(90deg) translateZ(-210px);
+  transform-origin:top;
+  background:repeating-linear-gradient(
+    90deg,#70472a 0 68px,#805333 69px 72px
+  );
+  border:8px solid #3a2114;
+  box-shadow:0 0 35px #0008;
+}
+
+.back-wall {
+  position:absolute;
+  width:700px;
+  height:420px;
+  left:0;
+  top:0;
+  transform:translateZ(-235px);
+  background:linear-gradient(#59371f,#382316);
+  border:9px solid #28170f;
+  box-shadow:inset 0 0 50px #1b100a;
+}
+
+.left-wall {
+  position:absolute;
+  width:470px;
+  height:420px;
+  left:-235px;
+  top:0;
+  transform:rotateY(-90deg);
+  transform-origin:right;
+  background:linear-gradient(90deg,#2b1a11,#704529);
+  border:8px solid #28170f;
+}
+
+.sign {
+  position:absolute;
+  left:50%;
+  top:35px;
+  transform:translateX(-50%);
+  padding:13px 34px;
+  background:#9c4017;
+  border:4px solid #ffc247;
+  border-radius:8px;
+  color:#ffdc80;
+  font-size:30px;
+  font-weight:900;
+  letter-spacing:4px;
+  white-space:nowrap;
+  box-shadow:0 7px 0 #54250f,0 0 25px #ff9b35;
+}
+
+.shelf {
+  position:absolute;
+  width:190px;
+  height:235px;
+  top:125px;
+  background:linear-gradient(90deg,#60381e,#9b6234,#60381e);
+  border:8px solid #4a2917;
+  box-shadow:0 12px 16px #160d08;
+  transform:translateZ(10px);
+}
+
+.shelf.left { left:35px; }
+.shelf.right { right:35px; }
+
+.shelf:before,.shelf:after {
+  content:"";
+  position:absolute;
+  left:0;
+  width:100%;
+  height:12px;
+  background:#d49a50;
+  border:2px solid #4a2917;
+}
+
+.shelf:before { top:68px; }
+.shelf:after { top:145px; }
+
+.snack {
+  position:absolute;
+  width:47px;
+  height:58px;
+  border-radius:8px 8px 5px 5px;
+  background:linear-gradient(90deg,#d47b19,#ffc247 45%,#d47b19);
+  border:2px solid #ffe0a0;
+  box-shadow:3px 5px 5px #241307;
+  cursor:pointer;
+  transform:translateZ(20px);
+  transition:.2s;
+}
+
+.snack:before {
+  content:"CRUJIX";
+  position:absolute;
+  top:20px;
+  left:2px;
+  right:2px;
+  text-align:center;
+  font-size:8px;
+  font-weight:900;
+  color:white;
+  background:#a43f15;
+  padding:3px 0;
+}
+
+.snack:after {
+  content:"SNACK";
+  position:absolute;
+  bottom:5px;
+  left:0;
+  right:0;
+  text-align:center;
+  font-size:7px;
+  color:#4a260f;
+  font-weight:bold;
+}
+
+.snack:hover {
+  transform:translateZ(35px) scale(1.12);
+}
+
+.shelf .snack:nth-child(1) { left:14px;top:7px; }
+.shelf .snack:nth-child(2) {
+  left:70px;top:7px;
+  background:linear-gradient(90deg,#d85b22,#ff9b45,#d85b22);
+}
+.shelf .snack:nth-child(3) {
+  left:126px;top:7px;
+  background:linear-gradient(90deg,#b98a2c,#ffe17a,#b98a2c);
+}
+.shelf .snack:nth-child(4) {
+  left:14px;top:83px;
+  background:linear-gradient(90deg,#53803b,#a5c95a,#53803b);
+}
+.shelf .snack:nth-child(5) {
+  left:70px;top:83px;
+  background:linear-gradient(90deg,#bd5424,#f7a04b,#bd5424);
+}
+.shelf .snack:nth-child(6) {
+  left:126px;top:83px;
+  background:linear-gradient(90deg,#987044,#e9c58a,#987044);
+}
+
+.counter {
+  position:absolute;
+  width:255px;
+  height:85px;
+  left:50%;
+  top:285px;
+  transform:translateX(-50%) translateZ(75px);
+  background:linear-gradient(#a76b3b 0 18%,#5c321c 19% 100%);
+  border:5px solid #3b2113;
+  box-shadow:0 14px 18px #160c07;
+}
+
+.counter:before {
+  content:"¡EL SABOR QUE ALEGRA!";
+  position:absolute;
+  inset:24px 0 auto;
+  text-align:center;
+  color:#ffda78;
+  font-weight:900;
+  font-size:14px;
+  letter-spacing:1px;
+}
+
+.counter:after {
+  content:"";
+  position:absolute;
+  left:-8px;
+  right:-8px;
+  top:-12px;
+  height:15px;
+  background:#d69b58;
+  border:3px solid #4b2a17;
+}
+
+.plant {
+  position:absolute;
+  bottom:5px;
+  width:48px;
+  height:75px;
+  background:
+    radial-gradient(ellipse at 50% 80%,#a54c20 0 38%,transparent 40%),
+    radial-gradient(ellipse at 35% 25%,#77a64e 0 20%,transparent 22%),
+    radial-gradient(ellipse at 65% 35%,#588b39 0 22%,transparent 24%);
+  transform:translateZ(45px);
+}
+
+.plant.one { left:15px; }
+.plant.two { right:15px; }
+
+.floor-label {
+  position:absolute;
+  left:50%;
+  top:390px;
+  transform:translateX(-50%) translateZ(8px);
+  color:#ffe0a0;
+  font-size:13px;
+  letter-spacing:3px;
+  font-weight:bold;
+  white-space:nowrap;
+}
+
+.info {
+  position:absolute;
+  left:18px;
+  bottom:18px;
+  max-width:300px;
+  padding:15px 17px;
+  background:#21150feF;
+  border:1px solid #ffc24788;
+  border-radius:13px;
+  z-index:3;
+}
+
+.info strong {
+  display:block;
+  color:var(--yellow);
+  font-size:18px;
+  margin-bottom:6px;
+}
+
+.info p {
+  font-size:13px;
+  line-height:1.45;
+  color:#f4e5d3;
+  margin:0;
+}
+
+.controls {
+  position:absolute;
+  right:18px;
+  bottom:18px;
+  display:flex;
+  gap:8px;
+  z-index:3;
+}
+
+button {
+  border:0;
+  border-radius:9px;
+  padding:11px 14px;
+  font-weight:bold;
+  cursor:pointer;
+  background:var(--orange);
+  color:#21130b;
+}
+
+button.secondary {
+  background:#fff1d8;
+  color:#382112;
+}
+
+.help {
+  text-align:center;
+  color:#e8d8c5;
+  font-size:12px;
+  padding:13px;
+}
+
+.catalog {
+  max-width:1100px;
+  margin:30px auto;
+  padding:0 18px 35px;
+}
+
+.catalog h2 {
+  text-align:center;
+  color:var(--yellow);
+}
+
+.cards {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+}
+
+.card {
+  background:#2a1c12;
+  border:1px solid #6b482b;
+  border-radius:13px;
+  padding:17px;
+  text-align:center;
+}
+
+.card .emoji { font-size:38px; }
+
+.card h3 {
+  margin:8px 0;
+  color:#ffd27a;
+}
+
+.card p {
+  font-size:12px;
+  color:#e4d3c0;
+  line-height:1.4;
+}
+
+footer {
+  text-align:center;
+  padding:20px;
+  background:#24170f;
+  color:#d8c5af;
+  font-size:12px;
+}
+
+/* CATÁLOGO Y PEDIDOS */
+
+.shop-panel {
+  max-width:1100px;
+  margin:22px auto;
+  padding:20px;
+  background:#2a1c12;
+  border:1px solid #76502d;
+  border-radius:16px;
+}
+
+.shop-panel h2 {
+  color:#ffd27a;
+  margin:0 0 8px;
+}
+
+.shop-note {
+  color:#e4d3c0;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.shop-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:13px;
+  margin-top:16px;
+}
+
+.shop-product {
+  background:#392619;
+  border:1px solid #75502f;
+  border-radius:12px;
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.shop-product h3 {
+  font-size:16px;
+  color:#ffda83;
+  margin:0;
+}
+
+.shop-product p {
+  font-size:12px;
+  color:#e4d3c0;
+  margin:0;
+}
+
+.shop-product .price {
+  font-size:19px;
+  font-weight:900;
+  color:white;
+}
+
+.shop-product .stock {
+  font-size:11px;
+  color:#c9b49b;
+}
+
+.shop-product button,
+.checkout button {
+  background:#f47721;
+  color:#21130b;
+  border:0;
+  border-radius:8px;
+  padding:10px;
+  font-weight:bold;
+}
+
+.shop-product button:disabled {
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+.cartbox {
+  margin-top:18px;
+  padding:15px;
+  background:#1e160f;
+  border:1px solid #76502d;
+  border-radius:12px;
+}
+
+.cart-row {
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:8px 0;
+  border-bottom:1px solid #5a3b25;
+  font-size:13px;
+}
+
+.cart-row button {
+  background:#6b3820;
+  color:white;
+  border:0;
+  border-radius:6px;
+  padding:4px 8px;
+}
+
+.checkout {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin-top:12px;
+}
+
+.checkout label {
+  display:grid;
+  gap:5px;
+  font-size:12px;
+  color:#e7d4bd;
+}
+
+.checkout input,
+.checkout textarea {
+  width:100%;
+  padding:10px;
+  border:1px solid #87603d;
+  border-radius:8px;
+  background:#fffaf2;
+  color:#24170f;
+}
+
+.checkout .wide { grid-column:1/-1; }
+
+.order-success {
+  display:none;
+  margin-top:12px;
+  padding:12px;
+  border-radius:9px;
+  background:#e5f8eb;
+  color:#145b31;
+  font-weight:bold;
+}
+
+@media(max-width:800px) {
+  .shop-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+
+@media(max-width:700px) {
+  .stage { height:570px;margin:0 8px; }
+
+  .scene {
+    transform:translate(-50%,-50%) scale(.72) rotateX(-12deg) rotateY(-25deg);
+  }
+
+  .cards { grid-template-columns:repeat(2,1fr); }
+
+  .info {
+    max-width:210px;
+    left:10px;
+    bottom:10px;
+  }
+
+  .controls {
+    right:10px;
+    bottom:10px;
+    flex-direction:column;
+  }
+
+  .controls button {
+    padding:9px;
+    font-size:11px;
+  }
+
+  .logo { font-size:19px; }
+
+  header a {
+    font-size:11px;
+    padding:9px;
+  }
+}
+
+@media(max-width:520px) {
+  .shop-grid,.checkout { grid-template-columns:1fr; }
+  .checkout .wide { grid-column:auto; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">
+    CRUJIX SABOR
+    <small>SNACKS ARTESANALES</small>
+  </div>
+  <a href="#comprar">HACER PEDIDO</a>
+</header>
+
+<section class="intro">
+  <h1>¡Vive CRUJIX en 3D!</h1>
+  <p>Explora nuestra tienda virtual y descubre el sabor que alegra tus momentos.</p>
+</section>
+
+<main>
+
+<section class="stage" id="stage" aria-label="Tienda tridimensional interactiva">
+
+  <div class="scene" id="scene">
+
+    <div class="back-wall"></div>
+    <div class="left-wall"></div>
+    <div class="room-floor"></div>
+
+    <div class="sign">CRUJIX SABOR</div>
+
+    <div class="shelf left">
+      <button class="snack" data-name="Papas chips" data-desc="Papas crujientes para disfrutar en cualquier momento."></button>
+      <button class="snack" data-name="Snacks saborizados" data-desc="Una opción llena de sabor para compartir."></button>
+      <button class="snack" data-name="Presentación clásica" data-desc="Conoce las presentaciones disponibles de CRUJIX."></button>
+      <button class="snack" data-name="Chifles" data-desc="Chifles inspirados en los sabores tradicionales."></button>
+      <button class="snack" data-name="Snacks especiales" data-desc="Descubre otras alternativas de nuestra línea."></button>
+      <button class="snack" data-name="Línea artesanal" data-desc="Productos de la línea artesanal CRUJIX SABOR."></button>
+    </div>
+
+    <div class="shelf right">
+      <button class="snack" data-name="Papas chips" data-desc="Papas crujientes para disfrutar en cualquier momento."></button>
+      <button class="snack" data-name="Otros snacks" data-desc="Explora otras opciones de nuestra tienda."></button>
+      <button class="snack" data-name="Productos CRUJIX" data-desc="Conoce nuestra variedad de snacks."></button>
+      <button class="snack" data-name="Chips de yuca" data-desc="Una alternativa de sabor artesanal."></button>
+      <button class="snack" data-name="Chips de plátano" data-desc="Una opción crujiente para compartir."></button>
+      <button class="snack" data-name="Productos especiales" data-desc="Descubre más opciones CRUJIX."></button>
+    </div>
+
+    <div class="counter"></div>
+    <div class="plant one"></div>
+    <div class="plant two"></div>
+    <div class="floor-label">TIENDA VIRTUAL · CRUJIX SABOR</div>
+
+  </div>
+
+  <div class="info">
+    <strong id="product-title">Bienvenido a CRUJIX</strong>
+    <p id="product-desc">
+      Selecciona uno de los paquetes de las estanterías para conocer más sobre nuestros productos.
+    </p>
+  </div>
+
+  <div class="controls">
+    <button id="reset">Vista inicial</button>
+    <button class="secondary" id="turn">Girar tienda</button>
+  </div>
+
+</section>
+
+<section class="shop-panel" id="comprar">
+
+  <h2>🛍️ Catálogo y pedidos CRUJIX</h2>
+
+  <p class="shop-note">
+    Los productos, precios y existencias se consultan desde el inventario del ERP/CRM.
+    Agrega tus productos al carrito y registra tu pedido.
+  </p>
+
+  <div class="shop-grid" id="shopProducts"></div>
+
+  <div class="cartbox">
+
+    <h2>
+      🛒 Mi carrito
+      <span id="cartCount" style="font-size:13px;color:#fff">0 productos</span>
+    </h2>
+
+    <div id="cartItems" class="shop-note">
+      Todavía no agregas productos.
+    </div>
+
+    <div style="text-align:right;font-size:21px;font-weight:900;color:#ffd27a;margin-top:12px">
+      Total: <span id="cartTotal">$0.00</span>
+    </div>
+
+    <form id="checkoutForm" class="checkout">
+
+      <label>
+        Nombre completo
+        <input name="nombre" required maxlength="90" placeholder="Tu nombre">
+      </label>
+
+      <label>
+        Teléfono / WhatsApp
+        <input name="telefono" required maxlength="25" placeholder="Ej. 593XXXXXXXXX">
+      </label>
+
+      <label>
+        Ciudad
+        <input name="ciudad" required maxlength="70" placeholder="Ciudad">
+      </label>
+
+      <label>
+        Correo electrónico
+        <input name="email" type="email" maxlength="100" placeholder="correo@ejemplo.com">
+      </label>
+
+      <label class="wide">
+        Dirección o indicaciones de entrega
+        <textarea name="direccion" required maxlength="250" rows="2" placeholder="Lugar de entrega"></textarea>
+      </label>
+
+      <button class="wide" type="submit">Confirmar pedido</button>
+
+    </form>
+
+    <div class="order-success" id="orderSuccess" role="status"></div>
+
+  </div>
+</section>
+
+<p class="help">
+  🖱️ Arrastra sobre la tienda para girarla · Selecciona los paquetes para ver sus detalles.
+</p>
+
+<section class="catalog" id="catalogo">
+
+  <h2>Nuestras categorías</h2>
+
+  <div class="cards">
+
+    <article class="card">
+      <div class="emoji">🥔</div>
+      <h3>Papas chips</h3>
+      <p>Textura crujiente y sabor para compartir.</p>
+    </article>
+
+    <article class="card">
+      <div class="emoji">🍌</div>
+      <h3>Chifles</h3>
+      <p>Una opción tradicional para disfrutar.</p>
+    </article>
+
+    <article class="card">
+      <div class="emoji">🍠</div>
+      <h3>Snacks de yuca</h3>
+      <p>Alternativas elaboradas con yuca.</p>
+    </article>
+
+    <article class="card">
+      <div class="emoji">🍿</div>
+      <h3>Otros snacks</h3>
+      <p>Descubre más productos de CRUJIX SABOR.</p>
+    </article>
+
+  </div>
+</section>
+
+</main>
+
+<footer>
+  © 2026 CRUJIX SABOR · Gemelo digital demostrativo
+</footer>
+
+<script>
+const scene = document.getElementById('scene');
+const stage = document.getElementById('stage');
+
+let rotY=-25;
+let rotX=-12;
+let dragging=false;
+let startX=0;
+let startY=0;
+let auto=false;
+
+function render() {
+  scene.style.transform =
+    `translate(-50%,-50%) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+}
+
+stage.addEventListener('pointerdown',e=>{
+  if(e.target.closest('button')) return;
+
+  dragging=true;
+  startX=e.clientX;
+  startY=e.clientY;
+  stage.setPointerCapture(e.pointerId);
+});
+
+stage.addEventListener('pointermove',e=>{
+  if(!dragging) return;
+
+  rotY+=(e.clientX-startX)*.45;
+  rotX=Math.max(-28,Math.min(8,rotX+(e.clientY-startY)*.25));
+
+  startX=e.clientX;
+  startY=e.clientY;
+
+  render();
+});
+
+stage.addEventListener('pointerup',()=>dragging=false);
+stage.addEventListener('pointercancel',()=>dragging=false);
+
+document.querySelectorAll('.snack').forEach(item=>{
+  item.addEventListener('click',()=>{
+    document.getElementById('product-title').textContent=item.dataset.name;
+    document.getElementById('product-desc').textContent=
+      item.dataset.desc+' Consulta el catálogo de la tienda para conocer precios y disponibilidad.';
+  });
+});
+
+document.getElementById('reset').addEventListener('click',()=>{
+  rotY=-25;
+  rotX=-12;
+  render();
+
+  document.getElementById('product-title').textContent='Bienvenido a CRUJIX';
+  document.getElementById('product-desc').textContent=
+    'Selecciona uno de los paquetes de las estanterías para conocer más sobre nuestros productos.';
+});
+
+document.getElementById('turn').addEventListener('click',()=>{
+  auto=!auto;
+  document.getElementById('turn').textContent=
+    auto?'Detener giro':'Girar tienda';
+});
+
+function animate() {
+  if(auto&&!dragging) {
+    rotY+=.18;
+    render();
+  }
+  requestAnimationFrame(animate);
+}
+animate();
+
+/* INTEGRACIÓN LOCAL ENTRE GEMELO DIGITAL Y ERP/CRM */
+
+const CRUJIX_SEED = [
+ {id:1,nombre:'Papas Chips',categoria:'papas',precio:2.5,costo:1.2,stock:50,peso:'100 g'},
+ {id:2,nombre:'Chifles de Plátano',categoria:'platano',precio:2,costo:1,stock:45,peso:'100 g'},
+ {id:3,nombre:'Yucas Fritas',categoria:'yuca',precio:2.75,costo:1.35,stock:30,peso:'100 g'},
+ {id:4,nombre:'Plátano Verde Frito',categoria:'platano',precio:2.5,costo:1.25,stock:40,peso:'100 g'},
+ {id:5,nombre:'Maní de Dulce',categoria:'otros',precio:2,costo:1,stock:25,peso:'100 g'},
+ {id:6,nombre:'Habas Fritas',categoria:'otros',precio:2.25,costo:1.1,stock:35,peso:'100 g'},
+ {id:7,nombre:'Chips de Camote',categoria:'otros',precio:2.5,costo:1.2,stock:28,peso:'100 g'},
+ {id:8,nombre:'Chips de Yuca',categoria:'yuca',precio:2.75,costo:1.35,stock:20,peso:'100 g'},
+ {id:9,nombre:'Chips de Plátano',categoria:'platano',precio:2.25,costo:1.1,stock:32,peso:'100 g'},
+ {id:10,nombre:'Patacones',categoria:'platano',precio:2.5,costo:1.25,stock:26,peso:'100 g'}
+];
+
+const shopGet=(key,fallback)=>{
+  try {
+    const value=localStorage.getItem('crujix_'+key);
+    return value===null?fallback:JSON.parse(value);
+  } catch {
+    return fallback;
+  }
+};
+
+const shopPut=(key,value)=>{
+  localStorage.setItem('crujix_'+key,JSON.stringify(value));
+};
+
+let shopProducts=shopGet('products',CRUJIX_SEED);
+let shopCart=[];
+
+const shopMoney=value=>'$'+Number(value||0).toFixed(2);
+
+const shopEscape=value=>String(value??'').replace(/[&<>"']/g,c=>({
+  '&':'&amp;',
+  '<':'&lt;',
+  '>':'&gt;',
+  '"':'&quot;',
+  "'":'&#39;'
+}[c]));
+
+function renderShopProducts() {
+
+  shopProducts=shopGet('products',CRUJIX_SEED);
+
+  const root=document.getElementById('shopProducts');
+
+  root.innerHTML=shopProducts.map(p=>`
+    <article class="shop-product">
+      <div style="font-size:28px">🥔</div>
+      <h3>${shopEscape(p.nombre)}</h3>
+      <p>${shopEscape(p.categoria||'Snack CRUJIX')} · ${shopEscape(p.peso||'Presentación artesanal')}</p>
+      <div class="price">${shopMoney(p.precio)}</div>
+      <div class="stock">${Number(p.stock)||0} unidades disponibles</div>
+      <button
+        type="button"
+        onclick="addShopCart(${Number(p.id)})"
+        ${Number(p.stock)<=0?'disabled':''}>
+        Agregar al carrito
+      </button>
+    </article>
+  `).join('') ||
+  '<p class="shop-note">No hay productos registrados en el inventario del ERP.</p>';
+}
+
+function addShopCart(id) {
+
+  const p=shopProducts.find(x=>String(x.id)===String(id));
+  if(!p) return;
+
+  const row=shopCart.find(x=>String(x.id)===String(id));
+
+  if((row?.cantidad||0)+1>Number(p.stock||0)) {
+    alert('No hay más unidades disponibles de este producto.');
+    return;
+  }
+
+  if(row) row.cantidad++;
+  else shopCart.push({
+    id:p.id,
+    nombre:p.nombre,
+    precio:Number(p.precio),
+    cantidad:1
+  });
+
+  renderShopCart();
+}
+
+function changeShopQty(id,delta) {
+
+  const row=shopCart.find(x=>String(x.id)===String(id));
+  if(!row) return;
+
+  const p=shopProducts.find(x=>String(x.id)===String(id));
+
+  row.cantidad+=delta;
+
+  if(row.cantidad<=0) {
+    shopCart=shopCart.filter(x=>String(x.id)!==String(id));
+  }
+  else if(p&&row.cantidad>Number(p.stock||0)) {
+    row.cantidad=Number(p.stock||0);
+    alert('Cantidad ajustada al stock disponible.');
+  }
+
+  renderShopCart();
+}
+
+function renderShopCart() {
+
+  const root=document.getElementById('cartItems');
+
+  root.innerHTML=shopCart.length
+    ? shopCart.map(x=>`
+      <div class="cart-row">
+        <span>
+          <b>${shopEscape(x.nombre)}</b><br>
+          ${shopMoney(x.precio)} × ${x.cantidad}
+        </span>
+        <span>
+          <b>${shopMoney(x.precio*x.cantidad)}</b><br>
+          <button type="button" onclick="changeShopQty(${Number(x.id)},-1)">−</button>
+          <button type="button" onclick="changeShopQty(${Number(x.id)},1)">+</button>
+        </span>
+      </div>
+    `).join('')
+    : 'Todavía no agregas productos.';
+
+  document.getElementById('cartCount').textContent=
+    shopCart.reduce((a,x)=>a+x.cantidad,0)+' unidades';
+
+  document.getElementById('cartTotal').textContent=
+    shopMoney(shopCart.reduce((a,x)=>a+x.precio*x.cantidad,0));
+}
+
+document.getElementById('checkoutForm').addEventListener('submit',function(e) {
+
+  e.preventDefault();
+
+  if(!shopCart.length) {
+    alert('Agrega al menos un producto al carrito.');
+    return;
+  }
+
+  // Consultar el inventario antes de guardar el pedido.
+  shopProducts=shopGet('products',CRUJIX_SEED);
+
+  for(const item of shopCart) {
+    const p=shopProducts.find(x=>String(x.id)===String(item.id));
+
+    if(!p||Number(p.stock)<item.cantidad) {
+      alert('Stock insuficiente para '+item.nombre+'. Actualiza el catálogo.');
+      renderShopProducts();
+      return;
+    }
+  }
+
+  const form=e.currentTarget;
+  const fd=new FormData(form);
+
+  const name=String(fd.get('nombre')||'').trim();
+  const phone=String(fd.get('telefono')||'').trim();
+
+  const orders=shopGet('orders',[]);
+  const customers=shopGet('customers',[]);
+
+  const total=shopCart.reduce(
+    (a,x)=>a+x.precio*x.cantidad,0
+  );
+
+  const orderId='CRJ-'+Date.now().toString().slice(-7);
+
+  const order={
+    id:orderId,
+    cliente:name,
+    telefono:phone,
+    fecha:new Date().toISOString(),
+    total:Number(total.toFixed(2)),
+    estado:'Pendiente',
+    origen:'Gemelo digital 3D',
+    direccion:String(fd.get('direccion')||'').trim(),
+    items:shopCart.map(x=>({...x}))
+  };
+
+  orders.unshift(order);
+
+  let customer=customers.find(c=>
+    (c.telefono||'').replace(/\D/g,'')===phone.replace(/\D/g,'') ||
+    (c.nombre||'').toLowerCase()===name.toLowerCase()
+  );
+
+  if(customer) {
+    customer.telefono=phone;
+    customer.email=String(fd.get('email')||customer.email||'');
+    customer.ciudad=String(fd.get('ciudad')||customer.ciudad||'');
+    customer.notas=[
+      customer.notas||'',
+      `Pedido web ${orderId}. Entrega: ${order.direccion}`
+    ].filter(Boolean).join(' | ');
+  }
+  else {
+    customers.unshift({
+      id:Date.now(),
+      nombre:name,
+      email:String(fd.get('email')||''),
+      telefono:phone,
+      ciudad:String(fd.get('ciudad')||''),
+      pais:'Ecuador',
+      tipo:'Cliente',
+      origen:'Gemelo digital 3D',
+      notas:`Pedido web ${orderId}. Entrega: ${order.direccion}`
+    });
+  }
+
+  // Guardar en las claves compartidas con el ERP/CRM.
+  shopPut('orders',orders);
+  shopPut('customers',customers);
+
+  document.getElementById('orderSuccess').style.display='block';
+
+  document.getElementById('orderSuccess').textContent=
+    `¡Pedido ${orderId} registrado! Estado: Pendiente. Ya aparece en el ERP/CRM cuando ambos sistemas están abiertos en el mismo navegador y origen.`;
+
+  shopCart=[];
+  renderShopCart();
+  renderShopProducts();
+  form.reset();
+});
+
+window.addEventListener('storage',event=>{
+  if(event.key==='crujix_products') {
+    shopProducts=shopGet('products',CRUJIX_SEED);
+    renderShopProducts();
+  }
+});
+
+renderShopProducts();
+renderShopCart();
+
+</script>
+</body>
+</html>
